@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><title>ApproveDesk · Local MVP</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><div class="logo">IMPERIAL <span>VENTURE FACTORY</span></div><p class="kicker">VF-01 · APPROVEDESK · LOCAL ENGINEERING PREVIEW</p><h1>Client approval, without the noise.</h1><p>Versioned project files, reviewer comments, explicit approval and auditable decisions.</p></header>
+<main>
+<section class="panel"><h2>01 · Account</h2><p id="account">Not signed in</p>
+<form id="accountForm"><label>Email<input id="email" type="email" required autocomplete="username" placeholder="owner@example.test"></label>
+<label>Password (12+ chars)<input id="password" type="password" required minlength="12" autocomplete="current-password"></label>
+<div class="actions"><button type="submit" id="login">Sign in</button><button type="button" id="register" class="secondary">Create account</button><button type="button" id="logout" class="secondary">Sign out</button></div></form></section>
+<section class="panel"><h2>02 · Workspace</h2>
+<form id="projectForm"><label>New project<input id="projectName" placeholder="Brand identity review" required></label><button type="submit">Create project</button></form>
+<div class="actions"><label>Project<select id="projects" aria-label="Current project"><option value="">Choose a project</option></select></label>
+<button type="button" class="secondary" id="refresh">Refresh projects</button></div>
+<p class="hint">Only project owners and specifically invited reviewers can access a project.</p></section>
+<section class="panel"><h2>03 · Review package</h2>
+<form id="reviewerForm"><label>Reviewer email (existing account)<input id="reviewerEmail" type="email" placeholder="reviewer@example.test" required></label><button type="submit">Invite reviewer</button></form>
+<form id="uploadForm"><label>Filename (.txt)<input id="fileName" value="concept.txt" required></label>
+<label>Document text<textarea id="fileContent" rows="4" required>Brand direction, revision one.</textarea></label><button type="submit">Save new version</button></form></section>
+<section class="panel"><h2>04 · Reviewer decision</h2><label>Version<select id="versions" aria-label="Document version"><option value="">Select version</option></select></label>
+<form id="commentForm"><label>Comment<textarea id="commentText" rows="3" required></textarea></label><button type="submit">Post comment</button></form>
+<div class="actions"><button type="button" id="approve">Approve version</button><button type="button" id="reject" class="secondary">Reject version</button></div>
+</section>
+<section class="panel wide"><h2>05 · Evidence</h2>
+<p id="status" role="status" aria-live="polite">Ready for a local test.</p>
+<h3>Current project and audit trail</h3><pre id="details" aria-label="Project detail JSON">Choose a project to inspect persisted review evidence.</pre>
+<button type="button" id="export" class="secondary">Export owner data as JSON</button>
+<p class="hint">The activity journal is a local hash-chain prototype, not the canonical IMPERIAL Core Audit Ledger or a regulatory signature.</p>
+</section>
+</main><footer>IMPERIAL Core · RomaskevicH · MVP v0.1 · Not production or commercial launch</footer>
+<script src="/main.js" defer></script></body></html>

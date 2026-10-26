@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: CSV invoice ingest; customer ledger; aging view; reminder draft; explicit approve-send; audit export.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Tenant}`, `{Customer}`, `{Invoice}`, `{ReminderDraft}`, `{DeliveryRecord}`, `{StatusImport` (logical domain names; final schema TBD).
+- Core entities: `Tenant`, `Customer`, `Invoice`, `ReminderDraft`, `DeliveryRecord`, `StatusImport` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

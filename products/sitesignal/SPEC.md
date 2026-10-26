@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Verified domain ownership; rate-limited probes; TLS expiry; incident log; alerts; export.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Account}`, `{MonitoredSite}`, `{OwnershipProof}`, `{Probe}`, `{Incident}`, `{Notification` (logical domain names; final schema TBD).
+- Core entities: `Account`, `MonitoredSite`, `OwnershipProof`, `Probe`, `Incident`, `Notification` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

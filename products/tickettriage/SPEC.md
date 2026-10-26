@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Ticket import; classification; queue; suggested response; human edit/approve; audit.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Workspace}`, `{Ticket}`, `{Category}`, `{Suggestion}`, `{Review}`, `{Response` (logical domain names; final schema TBD).
+- Core entities: `Workspace`, `Ticket`, `Category`, `Suggestion`, `Review`, `Response` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

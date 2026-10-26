@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Template; line items; versioned quote; share link; approval event; PDF export.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Company}`, `{Customer}`, `{Quote}`, `{LineItem}`, `{QuoteVersion}`, `{AcceptanceEvent` (logical domain names; final schema TBD).
+- Core entities: `Company`, `Customer`, `Quote`, `LineItem`, `QuoteVersion`, `AcceptanceEvent` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

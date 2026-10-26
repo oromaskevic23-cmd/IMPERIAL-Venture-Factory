@@ -1,0 +1,260 @@
+{
+  "schema_version": "1.0.0",
+  "program": "IMPERIAL Venture Factory",
+  "authority": "Alexander Romaskevich / RomaskevicH",
+  "last_reviewed": "2026-10-26",
+  "factual_status": "PROPOSED_PORTFOLIO_NOT_IMPLEMENTED",
+  "evidence_policy": "PUBLIC_DIGEST_ONLY",
+  "ventures": [
+    {
+      "id": "VF-01",
+      "name": "ApproveDesk",
+      "slug": "approvedesk",
+      "tagline": "Agency client approvals",
+      "buyer_persona": "Agencies",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "29–79",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/approvedesk/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-02",
+      "name": "InvoiceRelay",
+      "slug": "invoicerelay",
+      "tagline": "Invoice follow-ups",
+      "buyer_persona": "Service SMEs",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "29–99",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/invoicerelay/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-03",
+      "name": "CSVReconcile",
+      "slug": "csvreconcile",
+      "tagline": "Data export reconciliation",
+      "buyer_persona": "Operations/accounting",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "19–79",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/csvreconcile/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-04",
+      "name": "QuoteFlow",
+      "slug": "quoteflow",
+      "tagline": "Quote-to-acceptance",
+      "buyer_persona": "Service SMEs",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "39–129",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/quoteflow/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-05",
+      "name": "RenewalRadar",
+      "slug": "renewalradar",
+      "tagline": "Renewal tracking",
+      "buyer_persona": "Procurement/MSPs",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "29–79",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/renewalradar/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-06",
+      "name": "CatalogFix",
+      "slug": "catalogfix",
+      "tagline": "Catalog feed validation",
+      "buyer_persona": "E-commerce",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "19–99",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/catalogfix/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-07",
+      "name": "MarginLens",
+      "slug": "marginlens",
+      "tagline": "SKU contribution margin",
+      "buyer_persona": "E-commerce",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "29–99",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/marginlens/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-08",
+      "name": "TicketTriage",
+      "slug": "tickettriage",
+      "tagline": "Assisted support triage",
+      "buyer_persona": "Support teams",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "49–199",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/tickettriage/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-09",
+      "name": "WebhookLedger",
+      "slug": "webhookledger",
+      "tagline": "Webhook event reliability",
+      "buyer_persona": "SaaS developers",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "49–199",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/webhookledger/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    },
+    {
+      "id": "VF-10",
+      "name": "SiteSignal",
+      "slug": "sitesignal",
+      "tagline": "Consent-based site monitoring",
+      "buyer_persona": "Web agencies",
+      "stage": "IDEA",
+      "readiness": "NOT_ASSESSED",
+      "commercial": {
+        "pricing_usd_month_range_hypothesis": "9–49",
+        "revenue": "UNVERIFIED",
+        "customers": "UNVERIFIED",
+        "sold": false
+      },
+      "technical": {
+        "release": "NOT_RELEASED",
+        "inference": "NOT_VERIFIED",
+        "spec": "products/sitesignal/SPEC.md"
+      },
+      "governance": {
+        "final_authority": "ARCHITECT",
+        "operating_budget": "FREE_ONLY",
+        "asset_boundary": "INDEPENDENT_PRODUCT_NO_IMPERIAL_CORE_ASSIGNMENT"
+      }
+    }
+  ]
+}

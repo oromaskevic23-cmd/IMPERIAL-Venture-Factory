@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Signed endpoint option; redaction; retry metadata; safe idempotency; manual replay; logs.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Endpoint}`, `{Event}`, `{SignatureCheck}`, `{DeliveryAttempt}`, `{ReplayApproval}`, `{RetentionPolicy` (logical domain names; final schema TBD).
+- Core entities: `Endpoint`, `Event`, `SignatureCheck`, `DeliveryAttempt`, `ReplayApproval`, `RetentionPolicy` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

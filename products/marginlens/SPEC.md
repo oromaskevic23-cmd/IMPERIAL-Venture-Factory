@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Costs and fees import; SKU unit economics; scenario assumptions; margin waterfall; export.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Store}`, `{SKU}`, `{Sale}`, `{Fee}`, `{Return}`, `{CostBasis}`, `{MarginSnapshot` (logical domain names; final schema TBD).
+- Core entities: `Store`, `SKU`, `Sale`, `Fee`, `Return`, `CostBasis`, `MarginSnapshot` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

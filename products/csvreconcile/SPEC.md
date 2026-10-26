@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Local-first import; key mapping; duplicate/unmatched row report; deterministic tolerance settings; report export.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `ReconciliationJob}`, `{SourceSchema}`, `{KeyMap}`, `{Rule}`, `{Mismatch}`, `{Export` (logical domain names; final schema TBD).
+- Core entities: `ReconciliationJob`, `SourceSchema`, `KeyMap`, `Rule`, `Mismatch`, `Export` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

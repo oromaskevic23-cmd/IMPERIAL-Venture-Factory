@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Assets and revisions; per-client share links; annotated feedback; approve/reject with named actor; exportable evidence.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Tenant}`, `{Project}`, `{Client}`, `{AssetVersion}`, `{Comment}`, `{ApprovalEvent` (logical domain names; final schema TBD).
+- Core entities: `Tenant`, `Project`, `Client`, `AssetVersion`, `Comment`, `ApprovalEvent` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

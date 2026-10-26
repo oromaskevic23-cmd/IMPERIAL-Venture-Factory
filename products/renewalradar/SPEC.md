@@ -14,7 +14,7 @@
 - Customer can register/access a scoped workspace and input real but authorized data.
 - Core vertical slice: Renewal register; owner; reminders; escalation; snooze; CSV export.
 - User can see and export results; durable state and delete policy documented.
-- Core entities: `Organization}`, `{Contract}`, `{Renewal}`, `{Owner}`, `{Notification}`, `{Acknowledgment` (logical domain names; final schema TBD).
+- Core entities: `Organization`, `Contract`, `Renewal`, `Owner`, `Notification`, `Acknowledgment` (logical domain names; final schema TBD).
 - Least privilege, tenant isolation, accessibility and restore/rollback evidence.
 - Browser → API → database → response workflow independently tested.
 

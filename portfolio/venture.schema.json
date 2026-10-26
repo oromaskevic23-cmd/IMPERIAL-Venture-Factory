@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IMPERIAL Venture Portfolio",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ventures"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "ventures": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "stage",
+          "technical",
+          "commercial",
+          "governance"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^VF-[0-9]{2}$"
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "stage": {
+            "enum": [
+              "IDEA",
+              "DISCOVERY",
+              "VALIDATED",
+              "BUILD",
+              "QA",
+              "PILOT",
+              "RELEASED",
+              "EXIT_READY",
+              "SOLD"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

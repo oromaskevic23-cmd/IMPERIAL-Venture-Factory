@@ -31,6 +31,6 @@ GitHub Actions also runs the UI with actual Chromium using two separate browser 
 - Application-level audit data are editable by DB administrators. This is NOT canonical IMPERIAL Core Audit Ledger, ProofGraph or signed Approval Gateway.
 - Only .txt mock files, not PDF/document uploads or malware scanning.
 - Browser tests are real user sessions, NOT evidence that AI NCA agents wrote the code.
-- Independent human QA, full security acceptance, sandbox isolation, production backups and VELEON model inference remain blocked/unverified.
+- Independent human QA, full security acceptance, sandbox isolation, production backups and VELION ⚡️ model inference remain blocked/unverified.
 
 Strategic IMPERIAL Core intellectual property is not part of venture asset sales without separately authorized written agreements.

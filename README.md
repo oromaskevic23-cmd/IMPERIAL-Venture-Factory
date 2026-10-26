@@ -37,7 +37,7 @@ OPPORTUNITY -> DISCOVERY -> VALIDATED -> BUILD -> QA -> PILOT -> RELEASE
 ## Enterprise architecture and governance
 
 - **Federated Multi-Orchestrator Architecture**, no unrestricted global executor. ASTRA may coordinate mission planning; ventures retain independent execution boundaries.
-- `VELEON ⚡` is the LLM product identity; **MAX is a mode**, not a separate product. AI features are optional and only claimed after live verification.
+- `VELION ⚡️` is the LLM product identity; **MAX is a mode**, not a separate product. AI features are optional and only claimed after live verification.
 - `CONSTRUCTOR AI` is the strategic engineering system; `LEGION` and `Nano Core Agents` are scoped professional workers.
 - `Guardian Core`, `CYBER HAK`, `Approval Gateway`, `Audit Ledger`, `AI Passport`, `Enterprise Skills`, Zero Trust, Deny by Default, Fail Closed, and ProofGraph form mandatory governance boundaries.
 - Public and private artifacts have different access policies. The `CRYPTO IMPERIAL Ecosystem Boundary` prevents operational or financial conflation with venture sales.

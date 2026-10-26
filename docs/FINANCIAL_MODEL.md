@@ -16,7 +16,7 @@ At **3.9× assumed** profit multiple, illustrative asset value = **$27,378**.
 Ten ventures all meeting identical *assumptions* = **$273,780**, not a price estimate or promise. Confirm actual customers, cost structure, buyer terms and market comps prior to quoting values.
 
 ## Use-of-proceeds proposal
-After actual settlement, fees, taxes, retained customer liabilities, and reserve assessment: 50% engineering core (CONSTRUCTOR AI + VELEON), 25% infra/security, 15% validation and distribution, 10% contingency. **Proposal only** until Founder approves a legal financial plan.
+After actual settlement, fees, taxes, retained customer liabilities, and reserve assessment: 50% engineering core (CONSTRUCTOR AI + VELION ⚡️), 25% infra/security, 15% validation and distribution, 10% contingency. **Proposal only** until Founder approves a legal financial plan.
 
 ## Sale gates
 Revenue, net profit, customer assignment rights and cash receipts must reconcile. Never imply tokens are a source or guarantee of sale proceeds. CRYPTO IMPERIAL Ecosystem Boundary applies.

@@ -14,7 +14,7 @@
 - Individual venture: isolated application, identity and data domain, repository, secrets, release process, cost center and transfer package.
 - Factory: standard proposals, staging criteria, reusable *licensed* components and verification—not shared production customer secrets.
 - Governance: Architect approval overrides convenience; independent QA and security review cannot be self-certified by the builder.
-- No sale of core technology: ASTRA, VELEON, CONSTRUCTOR AI, HANTER, Guardian Core, CYBER HAK, Nano Core Agents platform, ProofGraph and constitutional governance require explicit, separately documented Founder approval.
+- No sale of core technology: ASTRA, VELION ⚡️, CONSTRUCTOR AI, HANTER, Guardian Core, CYBER HAK, Nano Core Agents platform, ProofGraph and constitutional governance require explicit, separately documented Founder approval.
 - IMPERIUM is a **long-term architectural digital currency intended for AI agents worldwide**; global use and market position are not established. Tokens NDB, IMPERIUM and the CRYPTO IMPERIAL Ecosystem are outside Venture Factory deal assets by default.
 
 ## Operating constraints

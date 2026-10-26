@@ -1,0 +1,49 @@
+name: ApproveDesk VF-01 — API and Real Browser E2E
+on:
+  pull_request:
+    paths:
+      - 'products/approvedesk/**'
+      - '.github/workflows/approvedesk-e2e.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tested-local-software:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Real API, SQLite and authorization tests
+        run: python3 -m unittest discover -s products/approvedesk/tests -v
+      - name: Set up Node.js 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Install fixed browser protocol client
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Start local SQLite application
+        run: |
+          export APPROVEDESK_DB="$RUNNER_TEMP/approvedesk-browser.sqlite3"
+          python3 -u products/approvedesk/app.py > "$RUNNER_TEMP/approvedesk-server.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8787/healthz > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/approvedesk-server.log"
+          exit 1
+      - name: Real two-user Chromium end-to-end test
+        env:
+          CI: '1'
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then echo "BLOCKED: system Chromium not found"; exit 1; fi
+          export CHROMIUM_BIN="$CHROME"
+          node products/approvedesk/browser-e2e.mjs
+      - name: Compile source and assert basic assets
+        run: |
+          python3 -m py_compile products/approvedesk/app.py
+          test -s products/approvedesk/index.html
+          test -s products/approvedesk/main.js

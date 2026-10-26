@@ -6,7 +6,7 @@
 - [ ] Chain of title for each contributor and third-party component
 - [ ] SPDX/license inventory and commercial-use permissions
 - [ ] Trademarks/domain ownership and working-name clearance
-- [ ] Clear carve-out for IMPERIAL Core, VELEON, CONSTRUCTOR AI, ASTRA, Guardian Core, CYBER HAK, LEGION, NCA framework, AI Passport and ProofGraph
+- [ ] Clear carve-out for IMPERIAL Core, VELION ⚡️, CONSTRUCTOR AI, ASTRA, Guardian Core, CYBER HAK, LEGION, NCA framework, AI Passport and ProofGraph
 - [ ] Assignment/license signed by the rightful owner; no unauthorized code copied into venture
 
 ## Commercial

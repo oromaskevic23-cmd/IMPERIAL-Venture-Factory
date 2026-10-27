@@ -45,14 +45,7 @@ def intake(conn, issue, *, dry_run=True):
         return {"status": "DRY_RUN", "draft": draft, "next": "OWNER_SCOPE_REVIEW_REQUIRED"}
     with conn.cursor() as cur:
         cur.execute(
-            """INSERT INTO crm_sofft.lead_registry
-               (workspace_id,demand_source,source_ref,source_receipt_hash,need,state)
-               SELECT %(workspace_id)s,%(demand_source)s,%(source_ref)s,
-                      %(source_receipt_hash)s,%(need)s,%(state)s
-               WHERE NOT EXISTS (
-                 SELECT 1 FROM crm_sofft.lead_registry
-                 WHERE workspace_id=%(workspace_id)s AND source_ref=%(source_ref)s
-               ) RETURNING lead_id""", draft
+            """INSERT INTO crm_sofft.lead_registry\n               (workspace_id,demand_source,source_ref,source_receipt_hash,need,state)\n               VALUES (%(workspace_id)s,%(demand_source)s,%(source_ref)s,\n                       %(source_receipt_hash)s,%(need)s,%(state)s)\n               ON CONFLICT (workspace_id,demand_source,source_receipt_hash) DO NOTHING\n               RETURNING lead_id""", draft
         )
         row = cur.fetchone()
     conn.commit()

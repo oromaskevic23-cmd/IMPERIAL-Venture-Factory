@@ -1,0 +1,47 @@
+name: Commercial Audit Pilot — offline evidence and automated QA
+on:
+  push:
+    branches:
+      - 'feat/commercial-audit-pilot-*'
+    paths:
+      - 'commercial_pilot/**'
+      - '.github/workflows/commercial-pilot.yml'
+  pull_request:
+    paths:
+      - 'commercial_pilot/**'
+      - '.github/workflows/commercial-pilot.yml'
+      - '.github/ISSUE_TEMPLATE/commercial_audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Tests for privacy, tamper resistance, no fake payment
+        run: python -m unittest discover -s commercial_pilot -p 'test_*.py' -v
+      - name: Create real deterministic lab report from synthetic fixture
+        run: python commercial_pilot/audit.py commercial_pilot/examples/synthetic_trace.json --out /tmp/imperial-commercial-audit
+      - name: Independently crosscheck report hash and metrics
+        run: python commercial_pilot/verify.py commercial_pilot/examples/synthetic_trace.json /tmp/imperial-commercial-audit/report.json --receipt /tmp/imperial-commercial-audit/qa_receipt.json
+      - name: Enforce strict reality gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('/tmp/imperial-commercial-audit')
+          report = json.loads((p / 'report.json').read_text())
+          receipt = json.loads((p / 'qa_receipt.json').read_text())
+          assert report['payment_confirmed'] is False
+          assert report['collected_revenue_usd'] == 0
+          assert report['independent_qa'] == 'NOT_YET_VERIFIED'
+          assert receipt['result'] == 'AUTOMATED_CROSSCHECK_PASS_NOT_HUMAN_QA'
+          print('PASS — verified offline audit; commercial release remains owner-gated')
+          PY

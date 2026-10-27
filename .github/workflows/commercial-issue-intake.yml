@@ -1,0 +1,53 @@
+name: Commercial Issue Intake — safe automatic acknowledgement
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: commercial-intake-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  bounded-triage:
+    if: ${{ !github.event.issue.pull_request && startsWith(github.event.issue.title, '[Audit request]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate untrusted public issue without shell interpolation
+        run: python commercial_pilot/triage.py "$GITHUB_EVENT_PATH" > /tmp/imperial_issue_triage.json
+      - name: Apply review label and static non-binding acknowledgement
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const d = JSON.parse(fs.readFileSync('/tmp/imperial_issue_triage.json', 'utf8'));
+            const labels = {
+              PUBLIC_ENQUIRY_RECEIVED: {name: 'commercial-enquiry-review', color: '0969da', description: 'Public non-binding enquiry requiring owner scope review'},
+              PRIVACY_REVIEW_REQUIRED: {name: 'privacy-review-required', color: 'b60205', description: 'Human privacy review required, never repost source'},
+              SCOPE_REVIEW_REQUIRED: {name: 'commercial-scope-review', color: 'd4c5f9', description: 'Enquiry missing required template fields'}
+            };
+            const label = labels[d.decision];
+            if (!label) return;
+            const {owner, repo} = context.repo;
+            const issue_number = context.issue.number;
+            try {
+              await github.rest.issues.getLabel({owner, repo, name: label.name});
+            } catch (e) {
+              if (e.status !== 404) throw e;
+              await github.rest.issues.createLabel({owner, repo, ...label});
+            }
+            await github.rest.issues.addLabels({owner, repo, issue_number, labels:[label.name]});
+            if (d.reply_allowed === true && d.decision === 'PUBLIC_ENQUIRY_RECEIVED') {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number,
+                body: 'Thank you for your enquiry to IMPERIAL Core. This issue is public and non-binding. Scope, terms, permitted inputs and any quote require a separate review and explicit approval; no payment or confidential data is requested here. Please do not post secrets, personal data or private customer files.'
+              });
+            }

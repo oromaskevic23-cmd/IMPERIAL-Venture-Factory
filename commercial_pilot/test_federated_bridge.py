@@ -15,7 +15,7 @@ class Cursor:
         pass
     def execute(self, sql, params):
         assert "crm_sofft.lead_registry" in sql
-        assert "WHERE NOT EXISTS" in sql
+        assert "ON CONFLICT (workspace_id,demand_source,source_receipt_hash) DO NOTHING" in sql
         key = params["source_ref"]
         self.result = None if key in self.db.keys else ("synthetic-id",)
         self.db.keys.add(key)

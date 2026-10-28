@@ -16,11 +16,10 @@ Build, launch, and sell independent software services and products to finance th
 
 **Security:** public GitHub issues are visible to everyone. Never post passwords, tokens, personal records, client data, confidential files or payment information.
 
-**Operational truth:** A working offline lab tool and public enquiry form are available; no paid customer, client production deployment, 24/7 autonomous execution or collected revenue is claimed.
+**Operational truth:** A working offline lab tool and public enquiry form are available. The hourly public GitHub issue discovery job performs read-only source screening and produces sanitized draft references; no database credentials, customer content or billing in GitHub Actions. The server-side CRM draft bridge exists but is not yet deployed to a private writer runtime. No paid customer, client production deployment, autonomous NCA execution or collected revenue is claimed.
 
-## Корпоративный коммерческий пилот
-
-IMPERIAL Core принимает заявки на оценку **аудита ошибок API/webhook/CRM-автоматизации**. Ориентировочный диапазон после согласования объёма — **$49–149**, не окончательная цена. [Оставить публичную заявку через GitHub](https://github.com/oromaskevic23-cmd/IMPERIAL-Venture-Factory/issues/new?template=commercial_audit.yml). Не публикуйте личные данные, пароли и конфиденциальные материалы.
+- [Review the commercial source discovery and its fail-closed gates](commercial_pilot/FEDERATED_BRIDGE.md).
+- [Check the commercial source discovery GitHub Actions runs](../../actions/workflows/commercial-source-discovery.yml).
 
 ## Enterprise boundaries
 

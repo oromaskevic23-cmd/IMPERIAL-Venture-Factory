@@ -1,0 +1,26 @@
+name: Commercial source discovery — public read-only
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '11 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commercial-source-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover-public-enquiries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Enforce offline source safety tests
+        run: python -m unittest discover -s commercial_pilot -p 'test_*.py' -v
+      - name: Discover public GitHub requests without credentials or customer content in logs
+        run: python -m commercial_pilot.source_sync --max-issues 30

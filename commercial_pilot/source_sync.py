@@ -11,6 +11,7 @@ import hashlib
 import json
 import re
 import urllib.request
+from urllib.parse import urlsplit
 from pathlib import Path
 
 from commercial_pilot.federated_bridge import REPO, WORKSPACE, SOURCE, receipt
@@ -45,6 +46,10 @@ def fetch_open_issues(*, opener=None, max_issues=30, token=None):
         headers["Authorization"] = "Bearer " + token
     req = urllib.request.Request(GITHUB_API + "/issues?state=open&per_page=" + str(max_issues), headers=headers)
     with opener(req, timeout=15) as response:
+        # Reject cross-host redirects before trusting a JSON API result.
+        final_url = response.geturl()
+        if final_url != req.full_url or urlsplit(final_url).hostname != "api.github.com":
+            raise SourceRejected("SOURCE_REDIRECT_NOT_ALLOWED")
         raw = response.read(MAX_RESPONSE + 1)
     if len(raw) > MAX_RESPONSE:
         raise SourceRejected("RESPONSE_TOO_LARGE")
@@ -77,8 +82,19 @@ def sanitized_candidate(raw):
     user = raw.get("user")
     if not isinstance(user, dict) or not isinstance(user.get("login"), str):
         raise SourceRejected("MISSING_AUTHOR")
-    if user["login"].casefold() == OWNER.casefold():
-        raise SourceRejected("OWNER_TEST_NOT_CUSTOMER")
+    if user["login"].casefold() == OWNER.casefold() or user.get("type") != "User":
+        raise SourceRejected("OWNER_OR_AUTOMATION_NOT_CUSTOMER")
+    labels = raw.get("labels")
+    if not isinstance(labels, list):
+        raise SourceRejected("LABELS_REQUIRED")
+    names = {item.get("name", "") for item in labels if isinstance(item, dict)
+             and isinstance(item.get("name"), str)}
+    if "commercial-enquiry-review" not in names:
+        raise SourceRejected("PUBLIC_TRIAGE_LABEL_NOT_PRESENT")
+    if any(("privacy" in name.lower() or "spam" in name.lower()
+            or "test" in name.lower() or "scope-review" in name.lower())
+           for name in names):
+        raise SourceRejected("PUBLIC_TRIAGE_ON_HOLD")
     title, body = raw.get("title"), raw.get("body")
     if not isinstance(title, str) or not isinstance(body, str):
         raise SourceRejected("MISSING_PUBLIC_SCOPE")

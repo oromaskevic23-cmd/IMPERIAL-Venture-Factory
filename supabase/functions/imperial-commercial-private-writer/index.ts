@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
   // Fetch the exact public GitHub Issue from a fixed host; never trust posted issue bodies.
   let reference;
   try {
-    const source = await fetch(API + "/issues/" + payload.issue_number, {headers: {
+    const source = await fetch(API + "/issues/" + payload.issue_number, {redirect:"error", headers: {
       "Accept":"application/vnd.github+json",
       "User-Agent":"imperial-private-crm-writer/1.0",
       "X-GitHub-Api-Version":"2022-11-28",

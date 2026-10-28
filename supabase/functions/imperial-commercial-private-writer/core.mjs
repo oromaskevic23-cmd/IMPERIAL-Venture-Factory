@@ -53,6 +53,9 @@ export function validateIssue(issue, number) {
     throw new SourceRejected("SCOPE_OR_CONSENT_MISSING");
   }
   if (!Array.isArray(issue.labels)) throw new SourceRejected("LABELS_REQUIRED");
+  if (!issue.labels.some(x => x?.name === "commercial-enquiry-review")) {
+    throw new SourceRejected("SOURCE_NOT_TRIAGED");
+  }
   if (issue.labels.some(x => typeof x?.name === "string"
     && /privacy-review-required|commercial-scope-review|test|spam/i.test(x.name))) {
     throw new SourceRejected("SOURCE_ON_HOLD");

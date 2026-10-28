@@ -38,7 +38,7 @@ These traces can reveal duplicate IDs, HTTP 429, 5xx, timeouts and latency anoma
 
 - Public issue template becomes available only after merge to repository default branch; issues must remain enabled.
 - No guaranteed price/delivery/contract by filing an issue.
-- GitHub issue → CRM-SOFFT automatic intake is not implemented.
+- The GitHub issue → CRM-SOFFT bridge is merged as source code. GitHub Actions can discover public enquiries read-only; automatic credentialed CRM writing and end-to-end commercial execution remain unimplemented.
 - GitHub Actions run offline tests and sample lab audit, not live 24/7 NCA execution.
 - Approval Gateway, Owner Kill Switch, Zero Trust and Public/Private Boundary stay intact.
 - Crypto IMPERIAL ecosystem remains separate; no payouts or tokens involved.

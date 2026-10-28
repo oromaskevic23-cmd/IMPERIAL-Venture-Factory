@@ -11,7 +11,8 @@ def event(title="[Audit request] Workflow problem", body=None):
             "### Expected first deliverable",
             "Audit report",
             "### Public issue privacy and scope confirmation",
-            "- [x] I understand this issue is public.",
+            "- [x] I understand this issue is public and contains no secrets, personal data, payment details, or confidential material.",
+            "- [x] I understand any price, delivery and live system access require separate human agreement and explicit approval.",
         ])
     return {"issue": {"title": title, "body": body}}
 
@@ -22,6 +23,10 @@ class IntakeTests(unittest.TestCase):
         self.assertEqual(triage(event(title="Unrelated"))["decision"], "IGNORE")
     def test_no_scope_cannot_be_auto_approved(self):
         self.assertEqual(triage(event(body="Please help"))["decision"], "SCOPE_REVIEW_REQUIRED")
+    def test_unchecked_consent_never_auto_acknowledged(self):
+        body = event()["issue"]["body"].replace(
+            "- [x] I understand any price", "- [ ] I understand any price")
+        self.assertEqual(triage(event(body=body))["decision"], "SCOPE_REVIEW_REQUIRED")
     def test_private_key_never_auto_replied(self):
         body = event()["issue"]["body"] + "\n-----BEGIN PRIVATE KEY-----"
         self.assertEqual(triage(event(body=body)), {"decision": "PRIVACY_REVIEW_REQUIRED", "reply_allowed": False})

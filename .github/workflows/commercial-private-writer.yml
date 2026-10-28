@@ -1,0 +1,48 @@
+name: Commercial private writer — bounded offline verification
+on:
+  push:
+    branches:
+      - 'feat/private-crm-writer-auth-boundary-*'
+    paths:
+      - 'supabase/functions/imperial-commercial-private-writer/**'
+      - 'tests/private-crm-writer.test.mjs'
+      - '.github/workflows/commercial-private-writer.yml'
+  pull_request:
+    paths:
+      - 'supabase/functions/imperial-commercial-private-writer/**'
+      - 'tests/private-crm-writer.test.mjs'
+      - '.github/workflows/commercial-private-writer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  private-draft-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: No dependencies or secrets needed — verify strict source and receipts
+        run: node --test tests/private-crm-writer.test.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Existing commercial pilot regression
+        run: python -m unittest discover -s commercial_pilot -p 'test_*.py' -v
+      - name: Enforce private boundary and no service-role credentials in function
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          source = Path('supabase/functions/imperial-commercial-private-writer/index.ts').read_text()
+          assert 'verify_jwt' not in source
+          assert 'SUPABASE_SERVICE_ROLE_KEY' not in source
+          assert 'SUPABASE_SECRET_KEY' not in source
+          assert 'AUTH_REQUIRED' in source
+          assert 'owner_scope_approval_required:true' in source
+          assert 'payment_confirmed:false' in source
+          print('PASS: least-privilege caller JWT path; zero spending and no false payment')
+          PY

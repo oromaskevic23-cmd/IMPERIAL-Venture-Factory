@@ -29,4 +29,4 @@ The flow stops at the bold gate. Later transitions are architecture / planned in
 
 ## Evidence limits
 
-The scheduled discovery workflow exists on `main`; its first scheduled execution had not yet been independently verified at the time of this checkpoint. A published workflow file is not proof of successful continuous runtime.
+The first actual GitHub Actions source-discovery job was triggered by a controlled main-branch push and independently checked: [run 40652562824](https://github.com/oromaskevic23-cmd/IMPERIAL-Venture-Factory/actions/runs/40652562824). It completed with SUCCESS, 37/37 unit tests PASS, source discovery completed without credentials, and the sanitized output reported `eligible_count=0`, `rejected_or_ignored_count=13`, `payments_verified=0`, `dispatch_allowed=false`. This is one observed run, not proof of uninterrupted 24/7 reliability. Scheduled hourly execution still needs future observations.

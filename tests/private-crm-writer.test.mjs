@@ -7,7 +7,7 @@ const consent = [
 ];
 function sample() {return {
  number:42, url:API+"/issues/42", html_url:"https://github.com/"+REPO+"/issues/42",
- state:"open", user:{login:"external-reviewer",type:"User"},labels:[],
+ state:"open", user:{login:"external-reviewer",type:"User"},labels:[{name:"commercial-enquiry-review"}],
  title:"[Audit request] webhook delay",body:[
  "What should be assessed?",
  "Public, non-confidential description of the problem",
@@ -31,6 +31,12 @@ test("source must be exact and open",()=>{
     x=>{x.number=43;},
     x=>{x.state="closed";},
  ]) {const x=sample();mod(x);assert.throws(()=>validateIssue(x,42),SourceRejected);}
+});
+test("only triaged issues qualify as customers",()=>{
+ const x=sample(); x.labels=[];
+ assert.throws(()=>validateIssue(x,42),SourceRejected);
+ const y=sample(); y.user.type="Bot";
+ assert.throws(()=>validateIssue(y,42),SourceRejected);
 });
 test("privacy and consent fail closed",()=>{
  for(const mod of [

@@ -11,7 +11,8 @@ def good_issue():
         "number": 91,
         "url": GITHUB_API + "/issues/91",
         "html_url": "https://github.com/" + REPO + "/issues/91",
-        "user": {"login": "external-client-example"},
+        "user": {"login": "external-client-example", "type": "User"},
+        "labels": [{"name": "commercial-enquiry-review"}],
         "state": "open",
         "title": "[Audit request] Intermittent webhook errors",
         "body": "\n".join([
@@ -30,12 +31,15 @@ def good_issue():
 class FakeResponse:
     def __init__(self, payload):
         self.payload = payload
+        self.url = GITHUB_API + "/issues?state=open&per_page=1"
     def __enter__(self):
         return self
     def __exit__(self, *args):
         return False
     def read(self, limit):
         return self.payload[:limit]
+    def geturl(self):
+        return self.url
 
 
 class SourceSyncTests(unittest.TestCase):
@@ -46,6 +50,32 @@ class SourceSyncTests(unittest.TestCase):
         self.assertEqual(len(draft["source_receipt_hash"]), 64)
         self.assertNotIn("external-client-example", json.dumps(draft))
         self.assertNotIn("webhook errors", json.dumps(draft))
+
+    def test_missing_review_label_denied(self):
+        x = good_issue()
+        x["labels"] = []
+        with self.assertRaises(SourceRejected):
+            sanitized_candidate(x)
+
+    def test_privacy_label_denied(self):
+        x = good_issue()
+        x["labels"].append({"name": "privacy-review-required"})
+        with self.assertRaises(SourceRejected):
+            sanitized_candidate(x)
+
+    def test_bot_not_a_customer(self):
+        x = good_issue()
+        x["user"]["type"] = "Bot"
+        with self.assertRaises(SourceRejected):
+            sanitized_candidate(x)
+
+    def test_redirect_denied(self):
+        def redirected(req, timeout):
+            res = FakeResponse(b"[]")
+            res.url = "https://attacker.example/issues?state=open"
+            return res
+        with self.assertRaises(SourceRejected):
+            fetch_open_issues(opener=redirected, max_issues=1)
 
     def test_owner_is_not_a_client(self):
         x = good_issue()

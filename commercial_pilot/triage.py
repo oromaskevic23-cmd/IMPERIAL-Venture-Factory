@@ -31,6 +31,12 @@ def triage(payload: dict) -> dict:
         return {"decision": "PRIVACY_REVIEW_REQUIRED", "reply_allowed": False}
     if not all(marker in body for marker in MARKERS):
         return {"decision": "SCOPE_REVIEW_REQUIRED", "reply_allowed": False}
+    required_consent = (
+        "- [x] I understand this issue is public and contains no secrets, personal data, payment details, or confidential material.",
+        "- [x] I understand any price, delivery and live system access require separate human agreement and explicit approval.",
+    )
+    if not all(confirmation in body for confirmation in required_consent):
+        return {"decision": "SCOPE_REVIEW_REQUIRED", "reply_allowed": False}
     return {"decision": "PUBLIC_ENQUIRY_RECEIVED", "reply_allowed": True}
 
 

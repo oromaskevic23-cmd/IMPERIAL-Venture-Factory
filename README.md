@@ -16,6 +16,7 @@ Build, launch, and sell independent software services and products to finance th
 - **Request an estimate:** [GitHub issue form](https://github.com/oromaskevic23-cmd/IMPERIAL-Venture-Factory/issues/new?template=commercial_audit.yml).
 - **See the offer and synthetic sample:** [Automation Failure Audit](docs/AUTOMATION_FAILURE_AUDIT.md).
 - **Technical evidence:** [offline audit and QA guide](COMMERCIAL_PILOT.md).
+- **Commercial rights and client-delivery gate:** [scope, licensing and signed-engagement requirements](docs/COMMERCIAL_LICENSING_AND_DELIVERY.md) — public source availability does not grant a software license.
 - **Release evidence:** [Commercial Pilot #13](https://github.com/oromaskevic23-cmd/IMPERIAL-Venture-Factory/pull/13).
 
 **Security:** public GitHub issues are visible to everyone. Never post passwords, tokens, personal records, client data, confidential files or payment information.

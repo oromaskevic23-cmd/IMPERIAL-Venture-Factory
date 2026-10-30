@@ -1,7 +1,7 @@
 // IMPERIAL Core private commercial writer: authorized draft-only, source revalidated.
 // Requires SUPABASE Auth user JWT, verified by gateway and Auth server.
 // Uses only a publishable API key + caller's JWT. No service_role secret.
-import {API, validateIssue, receiptSha256} from "./core.mjs";
+import {API, validateIssue, receiptSha256, isDryRun} from "./core.mjs";
 
 function respond(status, data) {
   return new Response(JSON.stringify(data), {status, headers: {
@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
   } catch { return respond(424, {error:"SOURCE_NOT_VERIFIABLE"}); }
 
   // Review-only mode, no write and no customer or personal fields in response.
-  if (payload.dry_run === true) {
+  if (isDryRun(payload)) {
     return respond(200, {status:"VERIFIED_SOURCE_DRY_RUN",
       source_ref:reference.source_ref, dispatch_allowed:false, payment_confirmed:false});
   }

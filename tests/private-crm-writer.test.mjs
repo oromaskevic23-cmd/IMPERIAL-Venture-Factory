@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {validateIssue,receiptSha256,SourceRejected,API,REPO} from "../supabase/functions/imperial-commercial-private-writer/core.mjs";
+import {validateIssue,receiptSha256,SourceRejected,isDryRun,API,REPO} from "../supabase/functions/imperial-commercial-private-writer/core.mjs";
 const consent = [
 "- [x] I understand this issue is public and contains no secrets, personal data, payment details, or confidential material.",
 "- [x] I understand any price, delivery and live system access require separate human agreement and explicit approval.",
@@ -51,6 +51,11 @@ test("incomplete, duplicated or invalid form fields fail closed",()=>{
 });
 test("digest matches the canonical Python SQL receipt",async()=>{
  assert.equal(await receiptSha256(32),"535a8bb6c51d4dd3d1255cf054cd9118adab749de67f543c076f4b5ab350d1db");
+});
+test("write requires explicit false; absent or malformed flag remains a dry run",()=>{
+ for(const value of [{}, null, {dry_run:true}, {dry_run:"false"}, {dry_run:0}])
+   assert.equal(isDryRun(value),true);
+ assert.equal(isDryRun({dry_run:false}),false);
 });
 test("reject bad numeric IDs",()=>{for(const n of [0, true, NaN, 1.5, 10000000000000])
  assert.throws(()=>validateIssue(sample(),n),SourceRejected);});

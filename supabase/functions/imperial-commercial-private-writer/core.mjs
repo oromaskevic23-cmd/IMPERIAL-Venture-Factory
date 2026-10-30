@@ -44,6 +44,8 @@ function completeForm(body) {
 export class SourceRejected extends Error {
   constructor(code) { super(code); this.name = "SourceRejected"; }
 }
+// Missing, malformed or affirmative flags must never silently select a write.
+export function isDryRun(payload) { return payload?.dry_run !== false; }
 export function validateIssue(issue, number) {
   if (!Number.isSafeInteger(number) || number < 1 || number > 9999999999999) {
     throw new SourceRejected("INVALID_ISSUE_NUMBER");

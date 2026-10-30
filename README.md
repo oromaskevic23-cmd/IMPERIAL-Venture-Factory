@@ -16,7 +16,7 @@ Build, launch, and sell independent software services and products to finance th
 
 **Security:** public GitHub issues are visible to everyone. Never post passwords, tokens, personal records, client data, confidential files or payment information.
 
-**Operational truth:** A working offline lab tool and public enquiry form are available. The hourly public GitHub issue discovery job performs read-only source screening and produces sanitized draft references; no database credentials, customer content or billing in GitHub Actions. The server-side CRM draft bridge exists but is not yet deployed to a private writer runtime. No paid customer, client production deployment, autonomous NCA execution or collected revenue is claimed.
+**Operational truth:** A working offline lab tool and public enquiry form are available. The public GitHub issue discovery job performs read-only source screening and produces sanitized draft references; no database credentials, customer content or billing in GitHub Actions. A narrow CRM writer Edge Function was deployed, but a read-only check on 30 October 2026 found zero enabled writer identities; no automatic end-to-end CRM ingestion has been verified. No paid customer, client production deployment, autonomous NCA execution or collected revenue is claimed.
 
 - [Review the commercial source discovery and its fail-closed gates](commercial_pilot/FEDERATED_BRIDGE.md).
 - [Check the commercial source discovery GitHub Actions runs](../../actions/workflows/commercial-source-discovery.yml).

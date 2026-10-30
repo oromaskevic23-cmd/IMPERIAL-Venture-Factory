@@ -11,7 +11,8 @@ def good_issue():
         "number": 91,
         "url": GITHUB_API + "/issues/91",
         "html_url": "https://github.com/" + REPO + "/issues/91",
-        "user": {"login": "external-client-example"},
+        "user": {"login": "external-client-example", "type": "User"},
+        "labels": [],
         "state": "open",
         "title": "[Audit request] Intermittent webhook errors",
         "body": "\n".join([
@@ -53,6 +54,18 @@ class SourceSyncTests(unittest.TestCase):
         with self.assertRaises(SourceRejected):
             sanitized_candidate(x)
 
+    def test_bot_and_review_hold_are_not_candidates(self):
+        for edit in ("bot", "hold", "missing_labels"):
+            x = good_issue()
+            if edit == "bot":
+                x["user"]["type"] = "Bot"
+            elif edit == "hold":
+                x["labels"] = [{"name": "privacy-review-required"}]
+            else:
+                del x["labels"]
+            with self.assertRaises(SourceRejected):
+                sanitized_candidate(x)
+
     def test_synthetic_is_not_a_client(self):
         x = good_issue()
         x["body"] += "\nSYSTEM TEST ONLY — NO CUSTOMER"
@@ -64,6 +77,18 @@ class SourceSyncTests(unittest.TestCase):
         x["body"] = x["body"].replace("- [x] I understand any price", "- [ ] I understand any price")
         with self.assertRaises(SourceRejected):
             sanitized_candidate(x)
+
+    def test_incomplete_form_and_sensitive_title_are_not_candidates(self):
+        for edit in ("empty", "invalid", "secret_title"):
+            x = good_issue()
+            if edit == "empty":
+                x["body"] = x["body"].replace("We observe duplicates and HTTP 429.", "_No response_")
+            elif edit == "invalid":
+                x["body"] = x["body"].replace("One webhook or API integration", "")
+            else:
+                x["title"] += " sk-abcdefghijklmnopqrstuvwxyz123"
+            with self.assertRaises(SourceRejected):
+                sanitized_candidate(x)
 
     def test_secrets_and_pii_denied(self):
         for payload in ("contact me at owner@example.com", "Authorization: Bearer abcdefghijklmnopqrstuvwxyz123"):

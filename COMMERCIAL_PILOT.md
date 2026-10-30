@@ -38,7 +38,8 @@ These traces can reveal duplicate IDs, HTTP 429, 5xx, timeouts and latency anoma
 
 - Public issue template becomes available only after merge to repository default branch; issues must remain enabled.
 - No guaranteed price/delivery/contract by filing an issue.
-- The GitHub issue → CRM-SOFFT bridge is merged as source code. GitHub Actions can discover public enquiries read-only; automatic credentialed CRM writing and end-to-end commercial execution remain unimplemented.
+- The GitHub issue → CRM-SOFFT bridge is merged as source code. GitHub Actions can discover public enquiries read-only. A narrow Edge Function is deployed, but the read-only 30 October 2026 check found zero enabled writer identities; live authenticated writing and end-to-end commercial execution remain unverified.
+- Source changes in a pull request do not update the deployed Edge Function. Its independently deployed version must be verified and reviewed before any writer is enabled.
 - GitHub Actions run offline tests and sample lab audit, not live 24/7 NCA execution.
 - Approval Gateway, Owner Kill Switch, Zero Trust and Public/Private Boundary stay intact.
 - Crypto IMPERIAL ecosystem remains separate; no payouts or tokens involved.

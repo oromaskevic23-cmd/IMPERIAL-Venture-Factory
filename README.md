@@ -11,6 +11,7 @@ Build, launch, and sell independent software services and products to finance th
 - **Indicative scope-based quote:** USD 49–149 (not a binding offer; exact price, terms, delivery and permitted access require individual approval).
 - **Deliverable under review:** trace diagnostics covering duplicate events, HTTP 429/5xx, timeouts, latency and a source-hashed report. Human independent QA and customer acceptance are separate gates.
 - **Request an estimate:** [GitHub issue form](https://github.com/oromaskevic23-cmd/IMPERIAL-Venture-Factory/issues/new?template=commercial_audit.yml).
+- **See the offer and synthetic sample:** [Automation Failure Audit](docs/AUTOMATION_FAILURE_AUDIT.md).
 - **Technical evidence:** [offline audit and QA guide](COMMERCIAL_PILOT.md).
 - **Release evidence:** [Commercial Pilot #13](https://github.com/oromaskevic23-cmd/IMPERIAL-Venture-Factory/pull/13).
 

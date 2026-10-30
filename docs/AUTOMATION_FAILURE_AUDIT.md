@@ -40,6 +40,10 @@ details, email addresses, personal data, private URLs, customer records or
 confidential logs. Use synthetic event identifiers when discussing examples.
 A GitHub account is needed to submit an issue.
 
+## Licensing, confidentiality and client rights
+
+This offering is a bounded professional diagnostic service, **not** a license to CONSTRUCTOR AI, VELION, HANTER or IMPERIAL Core source code. A client report and its permitted usage, fees, confidentiality and acceptance terms require a separately agreed and executed statement of work. No software code, model weights, third-party rights or production-system access are conveyed by submitting an enquiry. [Commercial licensing and delivery requirements](COMMERCIAL_LICENSING_AND_DELIVERY.md).
+
 ## Transparency
 
 The linked sample is generated from a fictional trace. Its automated checksum

@@ -1,5 +1,8 @@
 # IMPERIAL Venture Factory — IMPERIAL Core
 
+**Founding architect:** Alexander Nikolaevich Romaskevich (RomaskevicH). [Authorship](AUTHORS.md) · [License review](governance/LICENSE_INVENTORY.md).
+
+
 Build, launch, and sell independent software services and products to finance the long-term growth of IMPERIAL Core.
 
 **Founder • Owner • CEO • Chief Systems Architect:** Alexander Romaskevich (RomaskevicH)

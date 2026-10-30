@@ -75,10 +75,18 @@ def sanitized_candidate(raw):
     if raw.get("state") != "open":
         raise SourceRejected("NOT_OPEN")
     user = raw.get("user")
-    if not isinstance(user, dict) or not isinstance(user.get("login"), str):
+    if (not isinstance(user, dict) or not isinstance(user.get("login"), str)
+            or not user["login"] or user.get("type") != "User"):
         raise SourceRejected("MISSING_AUTHOR")
     if user["login"].casefold() == OWNER.casefold():
         raise SourceRejected("OWNER_TEST_NOT_CUSTOMER")
+    labels = raw.get("labels")
+    if not isinstance(labels, list):
+        raise SourceRejected("LABELS_REQUIRED")
+    if any(isinstance(label, dict) and isinstance(label.get("name"), str)
+           and re.search(r"privacy-review-required|commercial-scope-review|test|spam", label["name"], re.I)
+           for label in labels):
+        raise SourceRejected("SOURCE_ON_HOLD")
     title, body = raw.get("title"), raw.get("body")
     if not isinstance(title, str) or not isinstance(body, str):
         raise SourceRejected("MISSING_PUBLIC_SCOPE")

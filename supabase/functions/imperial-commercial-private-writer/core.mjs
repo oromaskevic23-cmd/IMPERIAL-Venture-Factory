@@ -19,9 +19,33 @@ const SENSITIVE = [
   /(?:authorization|api[_ -]?key|client[_ -]?secret)\s*[:=]\s*(?:bearer\s+)?[A-Za-z0-9_-]{8,}/i,
 ];
 const TEST = /SYSTEM TEST|NO CUSTOMER|\[TEST ONLY\]|SYNTHETIC DEMO/i;
+const SCOPE_OPTIONS = new Set([
+  "One webhook or API integration", "One CRM / workflow automation", "Uncertain — need scoping",
+]);
+const DELIVERABLE_OPTIONS = new Set([
+  "Diagnostic report and reproducible synthetic test", "Audit plus implementation quote", "Scope discussion first",
+]);
+function completeForm(body) {
+  const lines = body.split(/\r?\n/);
+  const headings = [];
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("### ")) headings.push([index, trimmed.slice(4).trim()]);
+  });
+  if (headings.length !== MARKERS.length || headings.some((h, i) => h[1] !== MARKERS[i])) return false;
+  const sections = headings.map(([start], i) =>
+    lines.slice(start + 1, i + 1 < headings.length ? headings[i + 1][0] : lines.length).join("\n").trim());
+  const symptom = sections[1];
+  if (!SCOPE_OPTIONS.has(sections[0]) || !DELIVERABLE_OPTIONS.has(sections[2])
+      || [...symptom].length < 8 || ["_no response_", "none", "n/a"].includes(symptom.toLowerCase())) return false;
+  const consentLines = new Set(sections[3].split("\n").map(line => line.trim()));
+  return CONSENT.every(value => consentLines.has(value));
+}
 export class SourceRejected extends Error {
   constructor(code) { super(code); this.name = "SourceRejected"; }
 }
+// Missing, malformed or affirmative flags must never silently select a write.
+export function isDryRun(payload) { return payload?.dry_run !== false; }
 export function validateIssue(issue, number) {
   if (!Number.isSafeInteger(number) || number < 1 || number > 9999999999999) {
     throw new SourceRejected("INVALID_ISSUE_NUMBER");
@@ -49,7 +73,7 @@ export function validateIssue(issue, number) {
   if (TEST.test(title + "\n" + body) || SENSITIVE.some(r => r.test(title + "\n" + body))) {
     throw new SourceRejected("TEST_OR_PRIVACY_HOLD");
   }
-  if (!MARKERS.every(v => body.includes(v)) || !CONSENT.every(v => body.includes(v))) {
+  if ([...title.slice("[Audit request]".length).trim()].length < 3 || !completeForm(body)) {
     throw new SourceRejected("SCOPE_OR_CONSENT_MISSING");
   }
   if (!Array.isArray(issue.labels)) throw new SourceRejected("LABELS_REQUIRED");

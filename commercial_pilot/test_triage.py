@@ -9,7 +9,7 @@ def event(title="[Audit request] Workflow problem", body=None):
             "### Public, non-confidential description of the problem",
             "Duplicate events with backoff.",
             "### Expected first deliverable",
-            "Audit report",
+            "Diagnostic report and reproducible synthetic test",
             "### Public issue privacy and scope confirmation",
             "- [x] I understand this issue is public and contains no secrets, personal data, payment details, or confidential material.",
             "- [x] I understand any price, delivery and live system access require separate human agreement and explicit approval.",
@@ -33,6 +33,20 @@ class IntakeTests(unittest.TestCase):
     def test_token_never_auto_replied(self):
         body = event()["issue"]["body"] + "\nAuthorization: Bearer abcdefghijklmnopqrstuvwxyz123"
         self.assertEqual(triage(event(body=body))["decision"], "PRIVACY_REVIEW_REQUIRED")
+    def test_sensitive_title_and_email_are_never_acknowledged(self):
+        for title in ("[Audit request] sk-abcdefghijklmnopqrstuvwxyz123", "[Audit request] person@example.com"):
+            self.assertEqual(triage(event(title=title))["decision"], "PRIVACY_REVIEW_REQUIRED")
+    def test_missing_answers_and_repeated_headings_are_not_complete(self):
+        body = event()["issue"]["body"]
+        for changed in (
+            body.replace("Duplicate events with backoff.", "_No response_"),
+            body.replace("One webhook or API integration", ""),
+            body.replace("Diagnostic report and reproducible synthetic test", "Unexpected"),
+            body + "\n### What should be assessed?\nOne webhook or API integration",
+        ):
+            self.assertEqual(triage(event(body=changed)), {"decision": "SCOPE_REVIEW_REQUIRED", "reply_allowed": False})
+    def test_title_requires_a_specific_subject(self):
+        self.assertEqual(triage(event(title="[Audit request] "))["decision"], "SCOPE_REVIEW_REQUIRED")
     def test_long_body_quarantined(self):
         self.assertEqual(triage(event(body="a" * 8001))["decision"], "PRIVACY_REVIEW_REQUIRED")
     def test_pr_ignored(self):

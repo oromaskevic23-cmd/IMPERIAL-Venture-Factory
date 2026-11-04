@@ -50,6 +50,11 @@ class CommercialPilotTests(unittest.TestCase):
         with self.assertRaisesRegex(IntakeRejected, "UNEXPECTED_EVENT_FIELDS"):
             load_packet(self.src)
 
+    def test_duplicate_json_fields_are_rejected_at_intake(self):
+        self.src.write_text('{"workflow":"a","workflow":"b","events":[]}', encoding="utf-8")
+        with self.assertRaisesRegex(IntakeRejected, "DUPLICATE_JSON_KEY"):
+            load_packet(self.src)
+
     def test_no_pii_in_workflow_name(self):
         self.payload["workflow"] = "someone@example.com"
         self.write()
@@ -70,6 +75,35 @@ class CommercialPilotTests(unittest.TestCase):
         output.write_text(json.dumps(report))
         with self.assertRaisesRegex(ValueError, "EVIDENCE_MISMATCH"):
             crosscheck(self.src, output, self.root / "out/qa_receipt.json")
+
+    def test_unexpected_or_modified_recommendations_are_rejected(self):
+        run(self.src, self.root / "out")
+        output = self.root / "out/report.json"
+        report = json.loads(output.read_text())
+        report["recommendations"].append("Unauthorized claim or private text")
+        output.write_text(json.dumps(report))
+        with self.assertRaisesRegex(ValueError, "EVIDENCE_MISMATCH"):
+            crosscheck(self.src, output, self.root / "out/qa_receipt.json")
+
+    def test_extra_report_fields_and_forged_payment_types_are_rejected(self):
+        run(self.src, self.root / "out")
+        output = self.root / "out/report.json"
+        original = json.loads(output.read_text())
+        for index, changes in enumerate(({"unapproved_text": "private"}, {"payment_confirmed": 0},
+                                         {"collected_revenue_usd": False}, {"schema_version": "wrong"})):
+            with self.subTest(changes=changes):
+                output.write_text(json.dumps({**original, **changes}))
+                with self.assertRaisesRegex(ValueError, "EVIDENCE_MISMATCH"):
+                    crosscheck(self.src, output, self.root / f"out/qa_receipt_{index}.json")
+
+    def test_modified_customer_facing_markdown_is_not_qa_passed(self):
+        run(self.src, self.root / "out")
+        output = self.root / "out/report.json"
+        md = self.root / "out/report.md"
+        md.write_text(md.read_text() + "\nUnreviewed statement\n")
+        with self.assertRaisesRegex(ValueError, "MARKDOWN_MISMATCH"):
+            crosscheck(self.src, output, self.root / "out/qa_receipt.json")
+        self.assertFalse((self.root / "out/qa_receipt.json").exists())
 
     def test_oversize_denied(self):
         self.src.write_bytes(b"0" * (256 * 1024 + 1))

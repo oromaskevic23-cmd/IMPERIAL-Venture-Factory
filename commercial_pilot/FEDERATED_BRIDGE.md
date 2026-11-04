@@ -19,3 +19,5 @@ HANTER is the command center; ASTRA is one orchestrator among federated orchestr
 ## Read-only public source discovery
 
 The scheduled GitHub workflow `commercial-source-discovery.yml` fetches public issues over HTTPS, verifies canonical API URLs, checks both consent boxes and triage, filters owner/system tests, and prints counts only. `python -m commercial_pilot.source_sync --output review.json` writes a sanitized **draft manifest**, never customer text. This is NOT production CRM ingestion; do not put Supabase secrets in GitHub Actions. There is no agent dispatch or payment capability in the discovery job.
+
+Discovery scans bounded pages from the canonical GitHub API instead of silently stopping at the first page. The default budget is 300 open issue/PR records, configurable from 1 to 1000. The scan fails explicitly if this budget is exceeded or duplicate issue numbers appear across pages. GitHub pagination is not a snapshot: concurrent source changes can still alter results, so an operator must recheck the original issue before taking action. A successful scan does not establish that a payment provider was checked or that no payment exists.

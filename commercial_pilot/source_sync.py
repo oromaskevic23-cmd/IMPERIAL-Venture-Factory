@@ -31,9 +31,9 @@ class SourceRejected(ValueError):
     """A public record is ineligible for safe CRM drafting."""
 
 
-def fetch_open_issues(*, opener=None, max_issues=30, token=None):
-    """Fetch direct from GitHub over verified HTTPS; no user-controlled URLs."""
-    if not isinstance(max_issues, int) or isinstance(max_issues, bool) or not 1 <= max_issues <= 100:
+def fetch_open_issues(*, opener=None, max_issues=300, token=None):
+    """Fetch every bounded page or fail; concurrent source edits remain possible."""
+    if not isinstance(max_issues, int) or isinstance(max_issues, bool) or not 1 <= max_issues <= 1000:
         raise SourceRejected("INVALID_LIMIT")
     opener = opener or urllib.request.urlopen
     headers = {
@@ -43,18 +43,34 @@ def fetch_open_issues(*, opener=None, max_issues=30, token=None):
     }
     if token:
         headers["Authorization"] = "Bearer " + token
-    req = urllib.request.Request(GITHUB_API + "/issues?state=open&per_page=" + str(max_issues), headers=headers)
-    with opener(req, timeout=15) as response:
-        raw = response.read(MAX_RESPONSE + 1)
-    if len(raw) > MAX_RESPONSE:
-        raise SourceRejected("RESPONSE_TOO_LARGE")
-    try:
-        issues = json.loads(raw)
-    except (UnicodeError, json.JSONDecodeError) as exc:
-        raise SourceRejected("INVALID_API_JSON") from exc
-    if not isinstance(issues, list) or len(issues) > max_issues:
-        raise SourceRejected("INVALID_API_COLLECTION")
-    return issues
+    per_page = min(max_issues, 100)
+    issues, seen = [], set()
+    page = 1
+    while True:
+        url = GITHUB_API + "/issues?state=open&per_page=" + str(per_page) + "&page=" + str(page)
+        req = urllib.request.Request(url, headers=headers)
+        with opener(req, timeout=15) as response:
+            raw = response.read(MAX_RESPONSE + 1)
+        if len(raw) > MAX_RESPONSE:
+            raise SourceRejected("RESPONSE_TOO_LARGE")
+        try:
+            batch = json.loads(raw)
+        except (UnicodeError, json.JSONDecodeError) as exc:
+            raise SourceRejected("INVALID_API_JSON") from exc
+        if not isinstance(batch, list) or len(batch) > per_page:
+            raise SourceRejected("INVALID_API_COLLECTION")
+        for item in batch:
+            if not isinstance(item, dict) or type(item.get("number")) is not int or item["number"] < 1:
+                raise SourceRejected("INVALID_API_COLLECTION")
+            if item["number"] in seen:
+                raise SourceRejected("SCAN_UNSTABLE_DUPLICATE")
+            seen.add(item["number"])
+        if len(issues) + len(batch) > max_issues:
+            raise SourceRejected("SCAN_LIMIT_EXCEEDED")
+        issues.extend(batch)
+        if len(batch) < per_page:
+            return issues
+        page += 1
 
 
 def sanitized_candidate(raw):
@@ -141,12 +157,13 @@ def discover(issues):
         "dispatch_allowed": False,
         "owner_review_required": True,
         "payments_verified": 0,
+        "payment_status": "NOT_CHECKED_NO_PROVIDER",
     }
 
 
 def main():
     parser = argparse.ArgumentParser(description="Read-only public commercial issue discovery")
-    parser.add_argument("--max-issues", type=int, default=30)
+    parser.add_argument("--max-issues", type=int, default=300)
     parser.add_argument("--output", type=Path, help="Write sanitized, non-binding draft manifest")
     args = parser.parse_args()
     result = discover(fetch_open_issues(max_issues=args.max_issues))
@@ -160,6 +177,7 @@ def main():
         "rejected_or_ignored_count": result["rejected_or_ignored_count"],
         "dispatch_allowed": False,
         "payments_verified": 0,
+        "payment_status": result["payment_status"],
     }, sort_keys=True))
 
 

@@ -1,6 +1,11 @@
 name: Commercial source discovery — public read-only
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/commercial-source-discovery.yml'
+      - 'commercial_pilot/source_sync.py'
+      - 'commercial_pilot/triage.py'
   push:
     branches: [main]
     paths:
@@ -14,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: commercial-source-discovery
+  group: commercial-source-discovery-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -29,4 +34,4 @@ jobs:
       - name: Enforce offline source safety tests
         run: python -m unittest discover -s commercial_pilot -p 'test_*.py' -v
       - name: Discover public GitHub requests without credentials or customer content in logs
-        run: python -m commercial_pilot.source_sync --max-issues 30
+        run: python -m commercial_pilot.source_sync --max-issues 300

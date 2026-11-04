@@ -28,9 +28,11 @@ Requires Python 3.11+, no third-party modules or network connection:
 Artifacts:
 - report.json — input SHA-256, counts, recommendations, independent QA NOT_YET_VERIFIED, revenue 0
 - report.md — readable review and suggested checks
-- qa_receipt.json — separately computed automated QA hashes; NOT a human signoff
+- qa_receipt.json — separately recomputed counts, fixed recommendations and SHA-256 hashes for the input, JSON report and exact Markdown report; NOT a human signoff. Modified reports do not pass this cross-check.
 
-Input: JSON workflow ID and event records with only ID, status, duration_ms. Unknown fields (including possible secrets) are rejected; reports copy no raw input data. Maximum 2000 events and 256 KiB. No network access.
+Input: JSON workflow ID and event records with only ID, status, duration_ms. Unknown fields are rejected. Reports include the workflow ID and aggregate counts but not raw event records, so use non-sensitive opaque IDs. These checks cannot guarantee redaction. Maximum 2000 events and 256 KiB. No network access.
+
+The input and both reports are size-bounded and duplicate JSON keys are rejected. This is a local automated check, not a certification, secure customer delivery channel, or proof of a sale. See the [first-case operator runbook](docs/FIRST_CASE_OPERATOR_RUNBOOK.md) for the human approval, acceptance and payment-evidence steps.
 
 These traces can reveal duplicate IDs, HTTP 429, 5xx, timeouts and latency anomalies, but cannot independently establish downstream success or remediate a live customer integration.
 

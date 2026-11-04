@@ -1,5 +1,9 @@
 import json
 import unittest
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from threading import Thread
+from unittest.mock import patch
+from urllib.parse import parse_qs, urlsplit
 
 from commercial_pilot.source_sync import (
     GITHUB_API, REPO, CONSENT, SourceRejected,
@@ -125,20 +129,78 @@ class SourceSyncTests(unittest.TestCase):
         self.assertEqual(result["rejected_or_ignored_count"], 1)
         self.assertFalse(result["dispatch_allowed"])
         self.assertEqual(result["payments_verified"], 0)
+        self.assertEqual(result["payment_status"], "NOT_CHECKED_NO_PROVIDER")
 
     def test_api_fetch_uses_bound_github_host(self):
         calls = []
         def opener(req, timeout):
             calls.append((req.full_url, timeout))
-            return FakeResponse(json.dumps([good_issue()]).encode())
+            page = int(parse_qs(urlsplit(req.full_url).query)["page"][0])
+            return FakeResponse(json.dumps([good_issue()] if page == 1 else []).encode())
         records = fetch_open_issues(opener=opener, max_issues=1)
         self.assertEqual(len(records), 1)
-        self.assertEqual(calls, [(GITHUB_API + "/issues?state=open&per_page=1", 15)])
+        self.assertEqual(calls, [(GITHUB_API + "/issues?state=open&per_page=1&page=1", 15),
+                                 (GITHUB_API + "/issues?state=open&per_page=1&page=2", 15)])
+
+    def test_discovers_candidate_on_second_page(self):
+        issue = good_issue()
+        ignored = [{"number": n} for n in range(1, 101)]
+        issue["number"] = 101
+        issue["url"] = GITHUB_API + "/issues/101"
+        issue["html_url"] = "https://github.com/" + REPO + "/issues/101"
+        calls = []
+        def opener(req, timeout):
+            query = parse_qs(urlsplit(req.full_url).query)
+            calls.append(query)
+            page = int(query["page"][0])
+            return FakeResponse(json.dumps(ignored if page == 1 else [issue]).encode())
+        issues = fetch_open_issues(opener=opener, max_issues=300)
+        self.assertEqual(len(issues), 101)
+        self.assertEqual(discover(issues)["eligible_count"], 1)
+        self.assertEqual([q["page"][0] for q in calls], ["1", "2"])
+
+    def test_exceeding_scan_budget_is_explicit_failure(self):
+        def opener(req, timeout):
+            page = int(parse_qs(urlsplit(req.full_url).query)["page"][0])
+            return FakeResponse(json.dumps([{"number": page}]).encode())
+        with self.assertRaisesRegex(SourceRejected, "SCAN_LIMIT_EXCEEDED"):
+            fetch_open_issues(opener=opener, max_issues=1)
+
+    def test_duplicate_across_pages_fails_instead_of_double_counting(self):
+        def opener(req, timeout):
+            page = int(parse_qs(urlsplit(req.full_url).query)["page"][0])
+            return FakeResponse(json.dumps([{"number": 1}, {"number": 2}] if page == 1 else [{"number": 1}]).encode())
+        with self.assertRaisesRegex(SourceRejected, "SCAN_UNSTABLE_DUPLICATE"):
+            fetch_open_issues(opener=opener, max_issues=2)
 
     def test_limit_is_fail_closed(self):
-        for n in (0, 101, True, "10"):
+        for n in (0, 1001, True, "10"):
             with self.assertRaises(SourceRejected):
                 fetch_open_issues(max_issues=n)
+
+    def test_redirect_is_never_followed_with_optional_token(self):
+        requests = []
+        class RedirectHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                requests.append((self.path, self.headers.get("Authorization")))
+                self.send_response(302)
+                self.send_header("Location", f"http://127.0.0.1:{self.server.server_port}/redirect-target")
+                self.end_headers()
+            def log_message(self, format, *args):
+                pass
+        server = ThreadingHTTPServer(("127.0.0.1", 0), RedirectHandler)
+        thread = Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            with patch("commercial_pilot.source_sync.GITHUB_API", f"http://127.0.0.1:{server.server_port}/repo"):
+                with self.assertRaisesRegex(SourceRejected, "GITHUB_REDIRECT_DENIED"):
+                    fetch_open_issues(token="synthetic-test-token")
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
+        self.assertEqual(len(requests), 1)
+        self.assertTrue(requests[0][0].startswith("/repo/issues?"))
 
     def test_invalid_api_response_denied(self):
         with self.assertRaises(SourceRejected):

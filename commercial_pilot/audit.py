@@ -23,6 +23,15 @@ class IntakeRejected(ValueError):
     pass
 
 
+def _unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise IntakeRejected("DUPLICATE_JSON_KEY")
+        result[key] = value
+    return result
+
+
 def canonical(data: object) -> bytes:
     return json.dumps(data, sort_keys=True, ensure_ascii=True, separators=(",", ":")).encode("utf-8")
 
@@ -34,7 +43,7 @@ def load_packet(path: Path) -> tuple[dict, str]:
     if len(raw) > MAX_INPUT_BYTES:
         raise IntakeRejected("INPUT_TOO_LARGE")
     try:
-        payload = json.loads(raw)
+        payload = json.loads(raw, object_pairs_hook=_unique_object)
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise IntakeRejected("INVALID_JSON") from exc
     if not isinstance(payload, dict) or set(payload) != PACKET_KEYS:

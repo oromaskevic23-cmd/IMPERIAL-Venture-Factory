@@ -31,11 +31,17 @@ class SourceRejected(ValueError):
     """A public record is ineligible for safe CRM drafting."""
 
 
+class _DenyRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise SourceRejected("GITHUB_REDIRECT_DENIED")
+
+
 def fetch_open_issues(*, opener=None, max_issues=300, token=None):
     """Fetch every bounded page or fail; concurrent source edits remain possible."""
     if not isinstance(max_issues, int) or isinstance(max_issues, bool) or not 1 <= max_issues <= 1000:
         raise SourceRejected("INVALID_LIMIT")
-    opener = opener or urllib.request.urlopen
+    # Never forward optional credentials, or silently change the origin, on a redirect.
+    opener = opener or urllib.request.build_opener(_DenyRedirect()).open
     headers = {
         "Accept": "application/vnd.github+json",
         "User-Agent": "imperial-core-commercial-readonly-discovery",

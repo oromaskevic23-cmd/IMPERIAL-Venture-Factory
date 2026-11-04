@@ -1,5 +1,8 @@
 import json
 import unittest
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from threading import Thread
+from unittest.mock import patch
 from urllib.parse import parse_qs, urlsplit
 
 from commercial_pilot.source_sync import (
@@ -174,6 +177,30 @@ class SourceSyncTests(unittest.TestCase):
         for n in (0, 1001, True, "10"):
             with self.assertRaises(SourceRejected):
                 fetch_open_issues(max_issues=n)
+
+    def test_redirect_is_never_followed_with_optional_token(self):
+        requests = []
+        class RedirectHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                requests.append((self.path, self.headers.get("Authorization")))
+                self.send_response(302)
+                self.send_header("Location", f"http://127.0.0.1:{self.server.server_port}/redirect-target")
+                self.end_headers()
+            def log_message(self, format, *args):
+                pass
+        server = ThreadingHTTPServer(("127.0.0.1", 0), RedirectHandler)
+        thread = Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            with patch("commercial_pilot.source_sync.GITHUB_API", f"http://127.0.0.1:{server.server_port}/repo"):
+                with self.assertRaisesRegex(SourceRejected, "GITHUB_REDIRECT_DENIED"):
+                    fetch_open_issues(token="synthetic-test-token")
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
+        self.assertEqual(len(requests), 1)
+        self.assertTrue(requests[0][0].startswith("/repo/issues?"))
 
     def test_invalid_api_response_denied(self):
         with self.assertRaises(SourceRejected):

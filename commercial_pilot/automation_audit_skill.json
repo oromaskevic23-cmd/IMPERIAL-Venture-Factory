@@ -1,0 +1,30 @@
+{
+  "schema": "imperial.skill.manifest.v1",
+  "skill_id": "imperial.skill.automation-audit",
+  "version": "0.1.0",
+  "tenant_id": "IMPERIAL-GLOBAL",
+  "orchestrator_id": "ASTRA",
+  "runtime_domain": "AUTOMATION_LAB",
+  "description": "Offline audit of consented synthetic or redacted workflow event traces.",
+  "capabilities": [
+    "simulate:task"
+  ],
+  "dependencies": [],
+  "input_fields": [
+    "trace"
+  ],
+  "output_fields": [
+    "report_json",
+    "qa_receipt"
+  ],
+  "exam_sha256": "b3acd91a2290b21f23f505ed1143379f0aa1d43498016ce77f6c4a69a437432c",
+  "max_input_bytes": 262144,
+  "max_output_bytes": 262144,
+  "risk_tier": "GUARDED",
+  "data_only": true,
+  "independent_qa_required": true,
+  "owner_approval_required": true,
+  "external_effects": false,
+  "production_authorized": false,
+  "spending_usd": 0
+}

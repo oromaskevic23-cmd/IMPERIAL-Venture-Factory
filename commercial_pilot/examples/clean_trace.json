@@ -1,0 +1,4 @@
+{
+  "workflow": "CLEAN_DEMO_001",
+  "events": [{"id": "evt_001", "status": 200, "duration_ms": 100}]
+}

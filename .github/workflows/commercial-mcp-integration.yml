@@ -1,0 +1,59 @@
+name: Commercial audit - Skill, Plugin and MCP integration
+on:
+  pull_request:
+    paths:
+      - 'commercial_pilot/**'
+      - 'integration_tests/**'
+      - 'tools/demo_commercial_mcp.py'
+      - '.github/workflows/commercial-mcp-integration.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'commercial_pilot/**'
+      - 'integration_tests/**'
+      - 'tools/demo_commercial_mcp.py'
+      - '.github/workflows/commercial-mcp-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integrated-mcp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    env:
+      IMPERIAL_SKILL_ROOT: ${{ github.workspace }}/pinned-skill
+      IMPERIAL_PLUGINS_ROOT: ${{ github.workspace }}/pinned-plugins
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout commercial pilot without stored credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Checkout pinned IMPERIAL Skill
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: oromaskevic23-cmd/IMPERIAL-Skill
+          ref: 3ae7ccc86d5e0329723ae3beb5a79ea22cdc3861
+          path: pinned-skill
+          persist-credentials: false
+      - name: Checkout pinned IMPERIAL Plugins
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: oromaskevic23-cmd/IMPERIAL-Plugins
+          ref: 6c23d839b85bf7ddc80aa9f1df7b2a4ed8328c60
+          path: pinned-plugins
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test real stdio, source pinning and cross-repository behavior
+        run: python -m unittest discover -s integration_tests -p 'test_*.py' -v
+      - name: Execute the local synthetic commercial demo
+        run: python tools/demo_commercial_mcp.py
+      - name: Exercise public enquiry discovery through MCP, without credentials
+        if: matrix.python-version == '3.12'
+        run: python tools/demo_commercial_mcp.py --discover-public

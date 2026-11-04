@@ -32,18 +32,10 @@ def _review_markdown(workflow, source_hash, counters, recommendations):
     return "\n".join(lines).encode("utf-8")
 
 
-def crosscheck(input_path: Path, report_path: Path, receipt_path: Path) -> dict:
-    markdown_path = report_path.with_name("report.md")
-    if any(p.is_symlink() for p in (input_path, report_path, markdown_path, receipt_path)):
-        raise ValueError("SYMLINK_DENIED")
-    if receipt_path.exists():
-        raise ValueError("RECEIPT_OVERWRITE_DENIED")
-    for path in (input_path, report_path, markdown_path):
-        if not path.is_file() or path.stat().st_size > 256 * 1024:
-            raise ValueError("EVIDENCE_FILE_REJECTED")
-    source = input_path.read_bytes()
-    report_bytes = report_path.read_bytes()
-    markdown_bytes = markdown_path.read_bytes()
+def crosscheck_values(source: bytes, report_bytes: bytes, markdown_bytes: bytes) -> dict:
+    """Independently cross-check bounded bytes without file or network access."""
+    if any(type(v) is not bytes for v in (source, report_bytes, markdown_bytes)):
+        raise ValueError("EVIDENCE_BYTES_REQUIRED")
     if len(source) > 256 * 1024 or len(report_bytes) > 256 * 1024 or len(markdown_bytes) > 256 * 1024:
         raise ValueError("EVIDENCE_TOO_LARGE")
     source_data = json.loads(source, object_pairs_hook=_unique_object)
@@ -113,6 +105,20 @@ def crosscheck(input_path: Path, report_path: Path, receipt_path: Path) -> dict:
         "client_delivery": "NOT_AUTHORIZED",
         "payment_confirmed": False,
     }
+    return receipt
+
+
+def crosscheck(input_path: Path, report_path: Path, receipt_path: Path) -> dict:
+    markdown_path = report_path.with_name("report.md")
+    if any(p.is_symlink() for p in (input_path, report_path, markdown_path, receipt_path)):
+        raise ValueError("SYMLINK_DENIED")
+    if receipt_path.exists():
+        raise ValueError("RECEIPT_OVERWRITE_DENIED")
+    for path in (input_path, report_path, markdown_path):
+        if not path.is_file() or path.stat().st_size > 256 * 1024:
+            raise ValueError("EVIDENCE_FILE_REJECTED")
+    receipt = crosscheck_values(input_path.read_bytes(), report_path.read_bytes(),
+                                markdown_path.read_bytes())
     with receipt_path.open("x", encoding="utf-8") as handle:
         handle.write(json.dumps(receipt, sort_keys=True, indent=2) + "\n")
     return receipt

@@ -1,0 +1,46 @@
+{
+  "dependencies": {
+    "plugins": {
+      "commit": "6c23d839b85bf7ddc80aa9f1df7b2a4ed8328c60",
+      "files": {
+        "manifests/n8n-workflow-audit.json": "60981d8193eac438c8d84a1cd90b4828430c101087afea99baabb2108034fa03",
+        "src/imperial_plugins/__init__.py": "d307d1789190554e27fc2ba26d55134245ef9a0653d8fecd39addb46c432c1bd",
+        "src/imperial_plugins/adapters.py": "2fa7ebc08a40e64e05453d0ed9fa07f1897b80bad5bb276fbfcb87f9c7eecaf5",
+        "src/imperial_plugins/chat_recovery.py": "1fd62ae3e6487cd96411e323ecbdc4767585c8b7457ed43cd0634b4bb372d65e",
+        "src/imperial_plugins/core.py": "3fc7473212316278ef8360339406e0594474bba348c938bee2c10cd01a487100",
+        "src/imperial_plugins/effective_robots.py": "a7573b4aa7acb040ec2c6ddbb2f9630bb58eb72a7cb4ed6d6fbe7ffd2c3c2c20",
+        "src/imperial_plugins/enterprise_skills.py": "95fb418258e71079850f5e5e257f13d8d18ac42d5169f6e28af1debeda255373",
+        "src/imperial_plugins/hanter_intake.py": "ae0226df595026e33a7d9f8c5214fde06c22a7ccad545df5441037e21c3e5877",
+        "src/imperial_plugins/indexing_mcp.py": "41abcb7c0506a084797ccf41d20214cc84514242e3f5d8075acf49e5df8b75c3",
+        "src/imperial_plugins/llamafactory_adapter.py": "f4ee963222b34ea56fecb291fa509d4036026880bd53c78a2e3cd4ce0a4cc11a",
+        "src/imperial_plugins/proofgraph.py": "9265e33c728c9151dd5268dbc7034eb0a642d2795769bd31b03afbea0780c6b6",
+        "src/imperial_plugins/public_inventory.py": "b28284f734d273b80d0cbcc1171e2887bdfe53779d50cfcf4fdbf2472ab1e26f",
+        "src/imperial_plugins/search_console_read.py": "4ca6a2aff3a7c34cc23edf6aff39272cf11b9e9b6f8510cf75f0b457f8af4de7",
+        "src/imperial_plugins/search_console_submit.py": "81afed7e579d978fb1ade8e382eb8ac7ad61914003dc274577ef33eff431e9e2",
+        "src/imperial_plugins/seo_nca_exam.py": "5abf4b49071116bea175f556dd42fdec6af696f7b342429916f484062f465fb9"
+      },
+      "package": "src/imperial_plugins",
+      "repository": "oromaskevic23-cmd/IMPERIAL-Plugins"
+    },
+    "skill": {
+      "commit": "3ae7ccc86d5e0329723ae3beb5a79ea22cdc3861",
+      "files": {
+        "src/imperial_skill/__init__.py": "d774c9ea395e0cf2dcbb2feb346e5692c2149bcc8f0a157caccd3f14d92341d8",
+        "src/imperial_skill/admission.py": "abb00e92b566bb23d8a03219f7b1bd5d34582329ed4ec62fd5b0f3ac2b81f290",
+        "src/imperial_skill/audit.py": "869cdc52a8ed2a9b061e2f07fbedc94d88bfe68fb624eae9f2b66141b06eaaa4",
+        "src/imperial_skill/bridge.py": "c1c78b265a0cb2e829c7ae98a941543cd97acd3a357c5b5501198654f8c926d1",
+        "src/imperial_skill/cli.py": "cbf7c75bd6adb8c233ae76ef1d6f93f8fe73b3031cde4a375878f2afc25e45bf",
+        "src/imperial_skill/exams.py": "6540ec5ae0ba0458970b5c58457ddb7d9e2378108e177d6522873e2526b81407",
+        "src/imperial_skill/manifest.py": "60f4da2ced47853fa7b3c45ac9d3b9766445080ed124fbf3ab8c99b538ddc4ae",
+        "src/imperial_skill/proofgraph.py": "cf39827cedca5079010d6e221bc0501df59b3fc90025ffadf098af41f30bcbc3",
+        "src/imperial_skill/registry.py": "4b83905cb790a1468195d540a6fabce245c913d7d1e42436527f384c41bbd7cc",
+        "src/imperial_skill/release.py": "3794def30b8bc63b0efb036149c7859f16d19876e4251a529e32e4bd2842a339",
+        "src/imperial_skill/subagents_100.py": "01c7960c6055b5e6e366f00f5b4feff527f9590e85807f28f19c8afc810ef73d",
+        "src/imperial_skill/trending_skills.py": "d7a561f83e6fa5b6e7c6f04c72d51dd1b37df23ff9227f3e9ba21788754f5113"
+      },
+      "package": "src/imperial_skill",
+      "repository": "oromaskevic23-cmd/IMPERIAL-Skill"
+    }
+  },
+  "schema": "imperial.commercial.local-source-lock.v1"
+}

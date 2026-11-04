@@ -1,0 +1,19 @@
+{
+  "schema": "imperial.skill.offline-exam.v1",
+  "skill_id": "imperial.skill.automation-audit",
+  "version": "0.1.0",
+  "cases": [
+    {
+      "case_id": "faults-detected",
+      "expected_sha256": "434f6a218f332f1839968c390c9d4da3ea7071e8000666b87f6af63d20cab45d",
+      "critical": true
+    },
+    {
+      "case_id": "clean-trace",
+      "expected_sha256": "db563d16d5c53420cf08ad6952e1a80506c595cb003c282954961d29df049360",
+      "critical": true
+    }
+  ],
+  "minimum_percent": 100,
+  "independent_qa_required": true
+}

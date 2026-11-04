@@ -46,6 +46,11 @@ def load_packet(path: Path) -> tuple[dict, str]:
         payload = json.loads(raw, object_pairs_hook=_unique_object)
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise IntakeRejected("INVALID_JSON") from exc
+    return validate_packet(payload), hashlib.sha256(raw).hexdigest()
+
+
+def validate_packet(payload: object) -> dict:
+    """Validate a decoded packet before any local analysis."""
     if not isinstance(payload, dict) or set(payload) != PACKET_KEYS:
         raise IntakeRejected("UNEXPECTED_PACKET_FIELDS")
     if not isinstance(payload["workflow"], str) or not ID.fullmatch(payload["workflow"]):
@@ -66,7 +71,7 @@ def load_packet(path: Path) -> tuple[dict, str]:
         duration = event["duration_ms"]
         if not isinstance(duration, int) or isinstance(duration, bool) or not 0 <= duration <= 600000:
             raise IntakeRejected("INVALID_DURATION")
-    return payload, hashlib.sha256(raw).hexdigest()
+    return payload
 
 
 def analyze(payload: dict, input_sha256: str) -> dict:

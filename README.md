@@ -5,7 +5,7 @@
 
 Build, launch, and sell independent software services and products to finance the long-term growth of IMPERIAL Core.
 
-**Founder • Owner • CEO • Chief Systems Architect:** Alexander Romaskevich (RomaskevicH)
+**Founder • Owner • CEO:** Alexander Romaskevich (RomaskevicH)
 
 ## Commercial Pilot 001 — Automation Failure Audit
 

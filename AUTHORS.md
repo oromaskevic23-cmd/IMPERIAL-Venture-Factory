@@ -1,5 +1,7 @@
 # IMPERIAL-Venture-Factory — Project Attribution and Rights Preservation
 
+<img src="https://raw.githubusercontent.com/oromaskevic23-cmd/oromaskevic23-cmd/main/assets/alexander-romaskevich-portrait-20261110.jpg" alt="Alexander Nikolaevich Romaskevich, Founder, Owner and CEO of IMPERIAL Core" width="160" />
+
 **Project founder / final architectural authority:** Alexander Nikolaevich Romaskevich (RomaskevicH).  
 **Project origin:** IMPERIAL Core.
 
